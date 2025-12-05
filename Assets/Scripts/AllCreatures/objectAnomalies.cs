@@ -95,7 +95,7 @@ public class objectAnomalies : MonoBehaviour
         {
             {
                 canCreateNewRandom = false;
-                Debug.Log("out of range unlucky" + Index);
+                Debug.Log("out of range unlucky m8" + Index);
                 yield return new WaitForSeconds(2f);
                 canCreateNewRandom = true;
             }
