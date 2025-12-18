@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3105686492895347188
+--- !u!114 &-2865101903266953084
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: newMAt
+  m_Name: yellowish
   m_Shader: {fileID: -6465566751694194690, guid: 78f68c9c613070c4db249a7b8a1001bd, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -41,5 +41,5 @@ Material:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
     m_Colors:
-    - _newColor: {r: 0.20000002, g: 0.20000002, b: 0.20000002, a: 0}
+    - _newColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
