@@ -25,7 +25,7 @@ public class UvObjects : MonoBehaviour
         timerForSpawn += Time.deltaTime;
         AppearObjectsOnBool();
     }
-    void AppearObjectsOnBool()
+    void AppearObjectsOnBool()//blood marks
     {
         if (diskBools.uvActive)
         {
