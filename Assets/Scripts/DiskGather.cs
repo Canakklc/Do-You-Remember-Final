@@ -8,6 +8,10 @@ public class DiskGather : MonoBehaviour
     Raycast takeRay;
     Quaternion fixRot = Quaternion.Euler(-90f, 0f, 0f);
     public List<GameObject> Disks = new List<GameObject>();
+    //coppied disks
+    GameObject firstDiskCopy;
+    GameObject secDiskCopy;
+    GameObject thirdDiskCopy;
     public List<bool> GrabbedDisks = new List<bool>();
     public List<bool> ActivateCamFunc = new List<bool>();
     public int maxDiskToCarry;
@@ -28,6 +32,10 @@ public class DiskGather : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             InsertDisk();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetAllValues();
         }
     }
 
@@ -62,7 +70,7 @@ public class DiskGather : MonoBehaviour
             if (GrabbedDisks[i] == false) continue;
             if (GrabbedDisks[0] == true)
             {
-                GameObject firstDiskCopy = Instantiate(Disks[0], diskPlaceToInstantiate.position, diskPlaceToInstantiate.rotation * fixRot);
+                firstDiskCopy = Instantiate(Disks[0], diskPlaceToInstantiate.position, diskPlaceToInstantiate.rotation * fixRot);
                 firstDiskCopy.SetActive(true);
                 maxDiskToCarry -= 1;
                 GrabbedDisks[0] = false;//close back
@@ -70,7 +78,7 @@ public class DiskGather : MonoBehaviour
             }
             else if (GrabbedDisks[1] == true)
             {
-                GameObject secDiskCopy = Instantiate(Disks[1], DiskPlaceSec.position, DiskPlaceSec.rotation * fixRot);
+                secDiskCopy = Instantiate(Disks[1], DiskPlaceSec.position, DiskPlaceSec.rotation * fixRot);
                 secDiskCopy.SetActive(true);
                 maxDiskToCarry -= 1;
                 GrabbedDisks[1] = false;//close back
@@ -78,13 +86,35 @@ public class DiskGather : MonoBehaviour
             }
             else if (GrabbedDisks[2] == true)
             {
-                GameObject thirdDiskCopy = Instantiate(Disks[2], diskPlaceToInstantiate.position, diskPlaceToInstantiate.rotation * fixRot);
+                thirdDiskCopy = Instantiate(Disks[2], diskPlaceToInstantiate.position, diskPlaceToInstantiate.rotation * fixRot);
                 thirdDiskCopy.SetActive(true);
                 maxDiskToCarry -= 1;
                 GrabbedDisks[2] = false;//close back
                 ActivateCamFunc[2] = true; //motion usable
             }
         }
+    }
+
+    void ResetAllValues()//reseting for the next scene
+    {
+        for (int i = 0; i < Disks.Count; i++)
+        {
+            Disks[i].SetActive(true);
+        }
+        for (int i = 0; i < GrabbedDisks.Count; i++)
+        {
+            GrabbedDisks[i] = false;
+        }
+        for (int i = 0; i < ActivateCamFunc.Count; i++)
+        {
+            ActivateCamFunc[i] = false;
+        }
+        maxDiskToCarry = 0;
+        Destroy(firstDiskCopy);
+        Destroy(secDiskCopy);
+        Destroy(thirdDiskCopy);
+        Debug.Log("reset working");
+
     }
 
 }
