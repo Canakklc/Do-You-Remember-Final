@@ -8,6 +8,7 @@ public class HeatDisk : MonoBehaviour
     PostProcessVolume volume;
     ColorGrading colorGrading;
     CCTVandCAM takeBool;
+    DiskGather condForDisk;
 
     public bool thermalActive;
     public bool uvActive;
@@ -28,6 +29,7 @@ public class HeatDisk : MonoBehaviour
         volume.profile.TryGetSettings(out colorGrading);
 
         takeBool = GetComponent<CCTVandCAM>();
+        condForDisk = GetComponent<DiskGather>();
     }
     void Start()
     {
@@ -36,21 +38,21 @@ public class HeatDisk : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T) && takeBool.onCCTV && !uvActive && !motionSensor)
+        if (Input.GetKeyDown(KeyCode.T) && takeBool.onCCTV && !uvActive && !motionSensor && condForDisk.ActivateCamFunc[0] == true)
         {
             StartPostExposure();
             thermalActive = !thermalActive;
             uvActive = false;
             motionSensor = false;
         }
-        if (Input.GetKeyDown(KeyCode.U) && takeBool.onCCTV == true && !thermalActive && !motionSensor)
+        if (Input.GetKeyDown(KeyCode.U) && takeBool.onCCTV == true && !thermalActive && !motionSensor && condForDisk.ActivateCamFunc[1] == true)
         {
             StartPostExposure();
             uvActive = !uvActive;
             thermalActive = false;
             motionSensor = false;
         }
-        if (Input.GetKeyDown(KeyCode.V) && takeBool.onCCTV == true && !thermalActive && !uvActive)
+        if (Input.GetKeyDown(KeyCode.V) && takeBool.onCCTV == true && !thermalActive && !uvActive && condForDisk.ActivateCamFunc[2] == true)
         {
             StartPostExposure();
             motionSensor = !motionSensor;

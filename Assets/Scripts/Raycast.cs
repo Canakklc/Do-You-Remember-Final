@@ -19,7 +19,7 @@ public class Raycast : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                Debug.Log(rayCastInfo.collider.name);
+                //Debug.Log(rayCastInfo.collider.name);
 
             }
         }

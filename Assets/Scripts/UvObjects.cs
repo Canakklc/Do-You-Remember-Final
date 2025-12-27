@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,15 @@ using UnityEngine;
 public class UvObjects : MonoBehaviour
 {
     HeatDisk diskBools;
+    objectAnomalies creatureType;
     public List<GameObject> Objects = new List<GameObject>();
     public float timerForSpawn = 0;
+    public int chooseRandom;
 
 
     void Start()
     {
+        chooseRandom = UnityEngine.Random.Range(1, 4);
         for (int i = 0; i < Objects.Count; i++)
         {
             Objects[i].SetActive(false);
@@ -19,6 +23,7 @@ public class UvObjects : MonoBehaviour
     void Awake()
     {
         diskBools = GetComponent<HeatDisk>();
+
     }
     void Update()
     {
@@ -31,17 +36,20 @@ public class UvObjects : MonoBehaviour
         {
             for (int i = 0; i < Objects.Count; i++)
             {
-                if (timerForSpawn >= 20f)
+                if (timerForSpawn >= 25f)
                 {
-                    Objects[0].SetActive(true);
-                }
-                if (timerForSpawn >= 35)
-                {
-                    Objects[1].SetActive(true);
-                }
-                if (timerForSpawn >= 42)
-                {
-                    Objects[2].SetActive(true);
+                    if (chooseRandom == 1)
+                    {
+                        Objects[0].SetActive(true);
+                    }
+                    if (chooseRandom == 2)
+                    {
+                        Objects[1].SetActive(true);
+                    }
+                    if (chooseRandom == 3)
+                    {
+                        Objects[2].SetActive(true);
+                    }
                 }
             }
         }
