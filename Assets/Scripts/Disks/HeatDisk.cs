@@ -7,18 +7,21 @@ public class HeatDisk : MonoBehaviour
 {
     PostProcessVolume volume;
     ColorGrading colorGrading;
+    ChromaticAberration chromaticAberration;
     CCTVandCAM takeBool;
     DiskGather condForDisk;
 
     public bool thermalActive;
     public bool uvActive;
     public bool motionSensor;
+    public bool EftActive;
     public GameObject motionSensorImage;
 
 
     Vector4 lockedLift = new Vector4(-0.2f, -0.2f, 0.4f, -0.6f);
     Vector4 lockedLiftUv = new Vector4(0.36f, -0.35f, 0.5f, -0.6f);
     Vector4 lockedLiftMotionSensor = new Vector4(0.36f, 1.0f, 0.1f, -0.18f);
+    Vector4 lockedLiftChromatic = new Vector4(-0.12f, -0.06f, 0.30f, -0.3f);
 
     void Awake()
     {
@@ -27,6 +30,7 @@ public class HeatDisk : MonoBehaviour
 
         volume.profile = Instantiate(volume.profile);
         volume.profile.TryGetSettings(out colorGrading);
+        volume.profile.TryGetSettings(out chromaticAberration);
 
         takeBool = GetComponent<CCTVandCAM>();
         condForDisk = GetComponent<DiskGather>();
@@ -59,6 +63,11 @@ public class HeatDisk : MonoBehaviour
             uvActive = false;
             thermalActive = false;
         }
+        if (Input.GetKeyDown(KeyCode.G)) ////WORK IN PROGRESS
+        {
+            // StartPostExposure();
+            //EftActive = !EftActive;
+        }
 
         if (thermalActive)//thermalDisk
         {
@@ -76,6 +85,11 @@ public class HeatDisk : MonoBehaviour
             colorGrading.lift.overrideState = true;
             colorGrading.lift.value = lockedLiftMotionSensor;
             motionSensorImage.SetActive(true);
+        }
+        else if (EftActive) // eft disk
+        {
+            colorGrading.lift.overrideState = true;
+            colorGrading.lift.value = lockedLiftChromatic;
         }
 
         else

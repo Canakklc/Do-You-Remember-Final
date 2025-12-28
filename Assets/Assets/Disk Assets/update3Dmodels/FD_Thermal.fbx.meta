@@ -3,12 +3,7 @@ guid: cb5604ce14702134690f7912c294e448
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ThermalImager
-    second: {fileID: 2100000, guid: d0fd3edf46cacc243844eeac7fb9aff9, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
