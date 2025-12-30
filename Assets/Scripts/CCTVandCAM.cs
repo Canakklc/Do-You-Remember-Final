@@ -103,6 +103,7 @@ public class CCTVandCAM : MonoBehaviour
             nextCam.gameObject.SetActive(false);
             exitButton.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
+            Debug.Log("sorun");
         }
     }
     IEnumerator CameraLogic()

@@ -37,7 +37,7 @@ public class HeatDisk : MonoBehaviour
     }
     void Start()
     {
-        motionSensorImage.SetActive(false);
+        //motionSensorImage.SetActive(false);
     }
 
     void Update()
@@ -84,7 +84,7 @@ public class HeatDisk : MonoBehaviour
         {
             colorGrading.lift.overrideState = true;
             colorGrading.lift.value = lockedLiftMotionSensor;
-            motionSensorImage.SetActive(true);
+            // motionSensorImage.SetActive(true);
         }
         else if (EftActive) // eft disk
         {
@@ -95,7 +95,7 @@ public class HeatDisk : MonoBehaviour
         else
         {
             colorGrading.lift.overrideState = false;
-            motionSensorImage.SetActive(false);
+            //motionSensorImage.SetActive(false);
         }
     }
 
