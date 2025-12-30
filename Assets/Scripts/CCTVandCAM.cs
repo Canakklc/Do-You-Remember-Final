@@ -21,8 +21,10 @@ public class CCTVandCAM : MonoBehaviour
     objectAnomalies objectFall;
     Raycast takeRay;
     public List<Camera> allCams = new List<Camera>();
+    public GameObject CameraCanvas; //Cam borders rec ETC
     void Start()
     {
+        CameraCanvas.SetActive(false);// Cam borders rec ETC
         canEnterCCTV = true;
         onMainCam = true;
         nextCam.gameObject.SetActive(false);
@@ -55,6 +57,8 @@ public class CCTVandCAM : MonoBehaviour
         var keyButton = Input.GetKeyDown(KeyCode.E);
         if (hit && distanceToCCTV <= 3 && keyButton && canEnterCCTV == true)
         {
+            chooseCamToRay[0] = true;
+            CameraCanvas.SetActive(true);
             onCCTV = true;
             canExitCCTV = true;
             canEnterCCTV = false;
@@ -66,6 +70,7 @@ public class CCTVandCAM : MonoBehaviour
         }
         else if (canExitCCTV == true && keyButton)
         {
+            CameraCanvas.SetActive(false);
             onCCTV = false;
             canExitCCTV = false;
             canEnterCCTV = true;
@@ -90,6 +95,7 @@ public class CCTVandCAM : MonoBehaviour
     [Header("others")]
     public Camera activeCam;
     public Camera previousCam;
+    public List<bool> chooseCamToRay = new List<bool>();//SetBoolToRay
 
     public void ExitButton()
     {
@@ -104,12 +110,18 @@ public class CCTVandCAM : MonoBehaviour
             exitButton.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Debug.Log("sorun");
+            CameraCanvas.SetActive(false);
+        }
+        for (int i = 0; i < chooseCamToRay.Count; i++)
+        {
+            chooseCamToRay[i] = false;
         }
     }
     IEnumerator CameraLogic()
     {
         if (onMainCam == true && canActive == true)
         {
+            chooseCamToRay[0] = true;
             canActive = false;
             takeEffects.ResetAllVals();
             takeEffects.StartingCoro();
@@ -122,6 +134,8 @@ public class CCTVandCAM : MonoBehaviour
         }
         else if (allCams[3].depth == 0 && canTriggerRepeat == true && onMainCam == false && canActive == true)
         {
+            chooseCamToRay[3] = false;
+            chooseCamToRay[0] = true;
             canActive = false;
             takeEffects.ResetAllVals();
             takeEffects.StartingCoro();
@@ -135,6 +149,8 @@ public class CCTVandCAM : MonoBehaviour
 
         else if (onMainCam == false && allCams[0].depth == 0 && canActive == true)
         {
+            chooseCamToRay[0] = false;
+            chooseCamToRay[1] = true;//boolSetFirst
             canActive = false;
             takeEffects.ResetAllVals();
             takeEffects.StartingCoro();
@@ -147,6 +163,8 @@ public class CCTVandCAM : MonoBehaviour
         }
         else if (onMainCam == false && allCams[1].depth == 0 && triggerFortThirth == true && canActive == true)
         {
+            chooseCamToRay[1] = false;
+            chooseCamToRay[2] = true;//boolSetSec turn of first
             canActive = false;
             takeEffects.ResetAllVals();
             takeEffects.StartingCoro();
@@ -159,6 +177,8 @@ public class CCTVandCAM : MonoBehaviour
         }
         else if (onMainCam == false && allCams[2].depth == 0 && canActive == true)
         {
+            chooseCamToRay[2] = false;
+            chooseCamToRay[3] = true;
             canActive = false;
             takeEffects.ResetAllVals();
             takeEffects.StartingCoro();

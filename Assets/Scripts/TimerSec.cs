@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TimerSec : MonoBehaviour
 {
-    public Slider Slider;
+
     public TextMeshProUGUI Text;
     public int hourTime = 10;
     public float minuteTime = 00;
@@ -17,8 +17,7 @@ public class TimerSec : MonoBehaviour
 
     void Start()
     {
-        Slider.minValue = 0;
-        Slider.maxValue = 177;
+
     }
 
     void Update()
@@ -40,7 +39,7 @@ public class TimerSec : MonoBehaviour
         }
 
         Text.text = timeText;
-        Slider.value = totalPastSec;
+
     }
 
     void ClockLogic()
