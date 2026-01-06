@@ -6,6 +6,7 @@ public class justGhost : MonoBehaviour
 {
     public List<GameObject> roomLights = new List<GameObject>();
     objectAnomalies takeIndex;
+    InterractableObjects takeInum;//for collect anomalyComplicated
     public bool canCreateRandom = true;
 
     [Header("ghost assigments")]
@@ -38,6 +39,7 @@ public class justGhost : MonoBehaviour
     void Awake()
     {
         takeIndex = GetComponent<objectAnomalies>();
+        takeInum = GetComponent<InterractableObjects>();
     }
 
     void ChooseRandomLamp()//ghostLamp
@@ -51,16 +53,19 @@ public class justGhost : MonoBehaviour
                 {
                     roomLights[0].SetActive(false);
                     Debug.Log("LightShouldOFF" + takeIndex.Index);
+                    // takeInum.currentState = InterractableObjects.canCollect.Collectible;
                 }
                 else if (takeIndex.Index >= 3 && takeIndex.Index > 7)
                 {
                     roomLights[1].SetActive(false);
                     Debug.Log("SecShouldOff");
+                    // takeInum.currentState = InterractableObjects.canCollect.Collectible;
                 }
                 else
                 {
                     roomLights[2].SetActive(false);
                     Debug.Log("thirthShouldOff");
+                    //takeInum.currentState = InterractableObjects.canCollect.Collectible;
                 }
             }
         }
