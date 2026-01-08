@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class justGhost : MonoBehaviour
 {
+    public List<bool> lampDisabled = new List<bool>();
     public List<GameObject> roomLights = new List<GameObject>();
     objectAnomalies takeIndex;
-    InterractableObjects takeInum;//for collect anomalyComplicated
+    InterractableObjects forLights;//for collect anomalyComplicated
     public bool canCreateRandom = true;
 
     [Header("ghost assigments")]
@@ -25,6 +27,15 @@ public class justGhost : MonoBehaviour
         {
             Screens[i].SetActive(false);
         }
+        for (int i = 0; i < roomLights.Count; i++)
+        {
+            lampDisabled.Add(false); // false = açık
+        }
+
+        for (int i = 0; i < Screens.Count; i++)
+        {
+            Screens[i].SetActive(false);
+        }
 
     }
     void Update()
@@ -39,36 +50,28 @@ public class justGhost : MonoBehaviour
     void Awake()
     {
         takeIndex = GetComponent<objectAnomalies>();
-        takeInum = GetComponent<InterractableObjects>();
+        forLights = GetComponent<InterractableObjects>();
     }
 
-    void ChooseRandomLamp()//ghostLamp
+    void ChooseRandomLamp()
     {
-        if (takeIndex.setCreatureType[0] == true)
-        {
+        if (!takeIndex.setCreatureType[0]) return;
+        if (takeIndex.Index < 0 || takeIndex.Index > 10) return;
 
-            if (takeIndex.Index >= 0 && takeIndex.Index <= 10)
-            {
-                if (takeIndex.Index < 3)
-                {
-                    roomLights[0].SetActive(false);
-                    Debug.Log("LightShouldOFF" + takeIndex.Index);
-                    // takeInum.currentState = InterractableObjects.canCollect.Collectible;
-                }
-                else if (takeIndex.Index >= 3 && takeIndex.Index > 7)
-                {
-                    roomLights[1].SetActive(false);
-                    Debug.Log("SecShouldOff");
-                    // takeInum.currentState = InterractableObjects.canCollect.Collectible;
-                }
-                else
-                {
-                    roomLights[2].SetActive(false);
-                    Debug.Log("thirthShouldOff");
-                    //takeInum.currentState = InterractableObjects.canCollect.Collectible;
-                }
-            }
-        }
+        int chosenIndex = -1;
+
+        if (takeIndex.Index < 3) chosenIndex = 0;
+        else if (takeIndex.Index <= 7) chosenIndex = 1;
+        else chosenIndex = 2;
+
+        // 🔒 bu lamba zaten kapalıysa ÇIK
+        if (lampDisabled[chosenIndex]) return;
+
+        roomLights[chosenIndex].SetActive(false);
+        lampDisabled[chosenIndex] = true;
+        forLights.LampBools[chosenIndex] = true;
+
+        Debug.Log("Lamp anomaly created on: " + chosenIndex);
     }
     void ChooseRandomDevice()//reaching electric devices
     {
