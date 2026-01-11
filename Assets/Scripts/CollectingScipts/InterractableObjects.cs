@@ -6,18 +6,25 @@ using UnityEngine;
 
 public class InterractableObjects : MonoBehaviour
 {
+    GameObject hitObj;
     CamRaycast rayOfCam;
     justGhost takeRoomLights;
+    objectAnomalies pickObjectCheck;
     [SerializeField] int collectedAnomaly = 0;
     public List<GameObject> interractibleObjects = new List<GameObject>();
     public List<GameObject> complicatedInterractibles = new List<GameObject>();
     public List<bool> LampBools = new List<bool>();
     public TextMeshProUGUI printCollectedAnomalies;
+    [Header("Second level object list")]
+    public List<GameObject> secondLevelCollectibles = new List<GameObject>();
+    public List<GameObject> secondLevelCOllectiblesStatic = new List<GameObject>();
+    public float timerForHeatAnoms;
 
     void Awake()
     {
         rayOfCam = GetComponent<CamRaycast>();
         takeRoomLights = GetComponent<justGhost>();
+        pickObjectCheck = GetComponent<objectAnomalies>();
 
     }
     void Start()
@@ -35,38 +42,67 @@ public class InterractableObjects : MonoBehaviour
             CollectAnomaly();
         }
         printCollectedAnomalies.text = collectedAnomaly.ToString();
+        timerForHeatAnoms += Time.deltaTime;
     }
 
 
     void CollectAnomaly()
     {
         if (rayOfCam.rayCastInfo.collider == null) return;
-
-        GameObject hitObj = rayOfCam.rayCastInfo.collider.gameObject;
-
-        // NORMAL ANOMALY
-        if (interractibleObjects.Contains(hitObj))
+        hitObj = rayOfCam.rayCastInfo.collider.gameObject;
+        if (pickObjectCheck.setCreatureType[0] == true)
         {
-            collectedAnomaly++;
-            interractibleObjects.Remove(hitObj);
-            Debug.Log("Anomaly Collected");
-            return;
-        }
-
-        // COMPLICATED (LAMPS)
-        if (complicatedInterractibles.Contains(hitObj))
-        {
-            for (int i = 0; i < LampBools.Count; i++)
+            // NORMAL ANOMALY
+            if (interractibleObjects.Contains(hitObj))
             {
-                if (LampBools[i])
-                {
-                    LampBools[i] = false;
-                    collectedAnomaly++;
+                collectedAnomaly++;
+                interractibleObjects.Remove(hitObj);
+                Debug.Log("Anomaly Collected");
+                return;
+            }
 
-                    Debug.Log("Lamp anomaly collected: " + i);
-                    return;
+            // COMPLICATED (LAMPS)
+            if (complicatedInterractibles.Contains(hitObj))
+            {
+                for (int i = 0; i < LampBools.Count; i++)
+                {
+                    if (LampBools[i])
+                    {
+                        LampBools[i] = false;
+                        collectedAnomaly++;
+
+                        Debug.Log("Lamp anomaly collected: " + i);
+                        return;
+                    }
                 }
             }
+        }
+        if (pickObjectCheck.setCreatureType[1] == true)//level 2 collect logic
+        {
+            if (secondLevelCollectibles.Contains(hitObj))
+            {
+                if (timerForHeatAnoms > 60f)
+                {
+                    secondLevelCollectibles.Remove(hitObj);
+                    collectedAnomaly++;
+                    Debug.Log("Second collected");
+                }
+            }
+            if (secondLevelCOllectiblesStatic.Contains(hitObj))
+            {
+                bool canCut = pickObjectCheck.boolsToCutAction[0] ||
+                              pickObjectCheck.boolsToCutAction[1] ||
+                              pickObjectCheck.boolsToCutAction[2];
+
+                {
+                    if (canCut)
+                    {
+                        collectedAnomaly++;
+                        secondLevelCOllectiblesStatic.Remove(hitObj);
+                    }
+                }
+            }
+
         }
     }
 

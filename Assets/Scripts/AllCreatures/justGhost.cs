@@ -64,7 +64,6 @@ public class justGhost : MonoBehaviour
         else if (takeIndex.Index <= 7) chosenIndex = 1;
         else chosenIndex = 2;
 
-        // 🔒 bu lamba zaten kapalıysa ÇIK
         if (lampDisabled[chosenIndex]) return;
 
         roomLights[chosenIndex].SetActive(false);
@@ -97,6 +96,11 @@ public class justGhost : MonoBehaviour
             if (timeForGhost >= 20f)
             {
                 spawnedGhost = Instantiate(Ghost, ghostStartPos.position, ghostStartPos.rotation);
+                forLights.interractibleObjects.Add(spawnedGhost);
+                BoxCollider bc = spawnedGhost.GetComponent<BoxCollider>();
+                bc.isTrigger = false;
+                bc.size = new Vector3(1f, 2f, 1f);
+                bc.center = new Vector3(0f, 1f, 0f);
                 onlyOnce = true;
                 StartCoroutine(MoveGhost(spawnedGhost));
             }
@@ -104,7 +108,7 @@ public class justGhost : MonoBehaviour
     }
     IEnumerator MoveGhost(GameObject Ghost)
     {
-        float Duration = 5;
+        float Duration = 8;
         float Elapsed = 0;
         var startPos = ghostStartPos.transform.position;
         var endPos = ghostEndPos.transform.position;
