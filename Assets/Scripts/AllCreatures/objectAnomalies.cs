@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class objectAnomalies : MonoBehaviour
 {
+    InterractableObjects takeListStatic;
+    HeatDisk takeImage;
     public List<GameObject> objectCanFall = new List<GameObject>();
     public List<Transform> whereToFall = new List<Transform>();
     public List<Vector3> originalObjPos = new List<Vector3>();
     public List<Quaternion> originalRots = new List<Quaternion>();
     public List<bool> boolsToCutAction = new List<bool>();//ont making for once
+    public List<bool> checkerForMotionAnimation = new List<bool>();//motion anim set active bool
+    public bool canTransformPos = true;//for static obj generate after collected
 
     public int Index;
     public int maxValue = 100;
@@ -47,14 +52,19 @@ public class objectAnomalies : MonoBehaviour
         }
 
     }
+    void Awake()
+    {
+        takeImage = GetComponent<HeatDisk>();
+        takeListStatic = GetComponent<InterractableObjects>();
+    }
     void Update()
     {
-
+        ImageDiskAppearAnim();
     }
     IEnumerator PossibilityPolWithObjects()
     {
         Index = UnityEngine.Random.Range(0, maxValue);
-        if (Index >= 0 && Index <= 10)
+        if (Index >= 0 && Index <= 10 && canTransformPos == true)
         {
             if (setCreatureType[1] == true)
             {
@@ -66,6 +76,8 @@ public class objectAnomalies : MonoBehaviour
                     objectCanFall[0].transform.rotation = Quaternion.Euler(-24.721f, 0, 0);
                     boolsToCutAction[0] = true;
                     Debug.Log("Book pos changed");
+                    checkerForMotionAnimation[0] = true;
+                    canTransformPos = false;
                 }
                 else if (Index >= 3 && Index < 7 && boolsToCutAction[1] == false)//paper cond;
                 {
@@ -73,7 +85,8 @@ public class objectAnomalies : MonoBehaviour
                     objectCanFall[1].transform.position = whereToFall[1].transform.position;
                     objectCanFall[1].transform.rotation = Quaternion.Euler(0, 180, 0);
                     boolsToCutAction[1] = true;
-
+                    checkerForMotionAnimation[1] = true;
+                    canTransformPos = false;
                     Debug.Log("Paper pos changed");
                 }
                 else //kettle
@@ -85,6 +98,8 @@ public class objectAnomalies : MonoBehaviour
                         objectCanFall[2].transform.rotation = Quaternion.Euler(2.401f, -5.953f, -95.849f);
                         Debug.Log("Kettle moved");
                         boolsToCutAction[2] = true;
+                        checkerForMotionAnimation[2] = true;
+                        canTransformPos = false;
                     }
                 }
                 yield return new WaitForSeconds(2f);
@@ -101,6 +116,24 @@ public class objectAnomalies : MonoBehaviour
             }
         }
 
+    }
+    public void ImageDiskAppearAnim()
+    {
+        if (takeImage.motionSensor)
+        {
+            if (checkerForMotionAnimation[0] == true || checkerForMotionAnimation[1] == true || checkerForMotionAnimation[2] == true)
+            {
+                takeImage.motionSensorImage.SetActive(true);
+                if (checkerForMotionAnimation[0] == true && checkerForMotionAnimation[1] == true && checkerForMotionAnimation[2] == true)
+                {
+                    takeImage.motionSensorImage.SetActive(false);
+                }
+            }
+            else
+            {
+                takeImage.motionSensorImage.SetActive(false);
+            }
+        }
     }
 
 

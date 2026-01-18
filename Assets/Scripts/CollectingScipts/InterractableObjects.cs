@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class InterractableObjects : MonoBehaviour
 {
-    GameObject hitObj;
+    public GameObject hitObj;
     CamRaycast rayOfCam;
     justGhost takeRoomLights;
     objectAnomalies pickObjectCheck;
-    [SerializeField] int collectedAnomaly = 0;
+    public int collectedAnomaly = 0;
     public List<GameObject> interractibleObjects = new List<GameObject>();
     public List<GameObject> complicatedInterractibles = new List<GameObject>();
     public List<bool> LampBools = new List<bool>();
@@ -99,6 +99,10 @@ public class InterractableObjects : MonoBehaviour
                     {
                         collectedAnomaly++;
                         secondLevelCOllectiblesStatic.Remove(hitObj);
+                        pickObjectCheck.checkerForMotionAnimation[0] = false;
+                        pickObjectCheck.checkerForMotionAnimation[1] = false; //those are for motion image
+                        pickObjectCheck.checkerForMotionAnimation[2] = false;
+                        pickObjectCheck.canTransformPos = true;
                     }
                 }
             }

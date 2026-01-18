@@ -84,7 +84,6 @@ public class HeatDisk : MonoBehaviour
         {
             colorGrading.lift.overrideState = true;
             colorGrading.lift.value = lockedLiftMotionSensor;
-            motionSensorImage.SetActive(true);
         }
         else if (EftActive) // eft disk
         {
