@@ -10,7 +10,10 @@ public class InterractableObjects : MonoBehaviour
     CamRaycast rayOfCam;
     justGhost takeRoomLights;
     objectAnomalies pickObjectCheck;
-    public int collectedAnomaly = 0;
+    anomalyCollectEffect anomalyCollectEffect;
+    public int collectedAnomaly = 0; //For level
+    public static int memoryCollect; //for disk static one
+    public TextMeshProUGUI memoryText;
     public List<GameObject> interractibleObjects = new List<GameObject>();
     public List<GameObject> complicatedInterractibles = new List<GameObject>();
     public List<bool> LampBools = new List<bool>();
@@ -25,6 +28,7 @@ public class InterractableObjects : MonoBehaviour
         rayOfCam = GetComponent<CamRaycast>();
         takeRoomLights = GetComponent<justGhost>();
         pickObjectCheck = GetComponent<objectAnomalies>();
+        anomalyCollectEffect = GetComponent<anomalyCollectEffect>();
 
     }
     void Start()
@@ -34,6 +38,10 @@ public class InterractableObjects : MonoBehaviour
             if (interractibleObjects[i] == null) continue;
         }
         //currentState = canCollect.Uncollectible;
+        if (memoryCollect == 0)
+        {
+            memoryCollect = 3;
+        }
     }
     void Update()
     {
@@ -43,6 +51,9 @@ public class InterractableObjects : MonoBehaviour
         }
         printCollectedAnomalies.text = collectedAnomaly.ToString();
         timerForHeatAnoms += Time.deltaTime;
+
+        //Memory collection 
+        memoryText.text = " =" + " " + memoryCollect.ToString();
     }
 
 
@@ -55,7 +66,9 @@ public class InterractableObjects : MonoBehaviour
             // NORMAL ANOMALY
             if (interractibleObjects.Contains(hitObj))
             {
+                anomalyCollectEffect.CallChromaticEffect();
                 collectedAnomaly++;
+                memoryCollect += 1;
                 interractibleObjects.Remove(hitObj);
                 Debug.Log("Anomaly Collected");
                 return;
@@ -69,7 +82,9 @@ public class InterractableObjects : MonoBehaviour
                     if (LampBools[i])
                     {
                         LampBools[i] = false;
+                        anomalyCollectEffect.CallChromaticEffect();
                         collectedAnomaly++;
+                        memoryCollect += 1;
 
                         Debug.Log("Lamp anomaly collected: " + i);
                         return;
@@ -84,7 +99,9 @@ public class InterractableObjects : MonoBehaviour
                 if (timerForHeatAnoms > 60f)
                 {
                     secondLevelCollectibles.Remove(hitObj);
+                    anomalyCollectEffect.CallChromaticEffect();
                     collectedAnomaly++;
+                    memoryCollect += 1;
                     Debug.Log("Second collected");
                 }
             }
@@ -98,6 +115,8 @@ public class InterractableObjects : MonoBehaviour
                     if (canCut)
                     {
                         collectedAnomaly++;
+                        memoryCollect += 1;
+                        anomalyCollectEffect.CallChromaticEffect();
                         secondLevelCOllectiblesStatic.Remove(hitObj);
                         pickObjectCheck.checkerForMotionAnimation[0] = false;
                         pickObjectCheck.checkerForMotionAnimation[1] = false; //those are for motion image

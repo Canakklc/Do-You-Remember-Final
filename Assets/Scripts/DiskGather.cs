@@ -44,20 +44,23 @@ public class DiskGather : MonoBehaviour
         if (takeRay == null) return;
         if (takeRay.rayCastInfo.collider == null) return;
         GameObject diskOnCursor = takeRay.rayCastInfo.collider.gameObject;
-        if (diskOnCursor == Disks[0] && maxDiskToCarry < 1)
+        if (diskOnCursor == Disks[0] && maxDiskToCarry < 1 && InterractableObjects.memoryCollect >= 1)
         {
+            InterractableObjects.memoryCollect -= 1;
             maxDiskToCarry += 1;
             GrabbedDisks[0] = true; // first disk ready for put in
             Disks[0].SetActive(false);
         }
-        if (diskOnCursor == Disks[1] && maxDiskToCarry < 1)//second disk ready for put in
+        if (diskOnCursor == Disks[1] && maxDiskToCarry < 1 && InterractableObjects.memoryCollect >= 2)//second disk ready for put in
         {
+            InterractableObjects.memoryCollect -= 2;
             maxDiskToCarry += 1;
             GrabbedDisks[1] = true; // second ready 
             Disks[1].SetActive(false);
         }
-        if (diskOnCursor == Disks[2] && maxDiskToCarry < 1)// third disk ready for put in
+        if (diskOnCursor == Disks[2] && maxDiskToCarry < 1 && InterractableObjects.memoryCollect >= 3)// third disk ready for put in
         {
+            InterractableObjects.memoryCollect -= 3;
             maxDiskToCarry += 1;
             GrabbedDisks[2] = true; //thirt ready
             Disks[2].SetActive(false);

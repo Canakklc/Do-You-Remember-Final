@@ -8,6 +8,7 @@ public class temperatureAnomaly : MonoBehaviour
     public Slider temperatureSlider;
     objectAnomalies ifSecondLevel;
     InterractableObjects anomalyRise;
+    anomalyCollectEffect ChromEffect;
     float timerForTemperature;
     public bool canCollectTemperature = false;
     public Button TempButton;
@@ -17,6 +18,7 @@ public class temperatureAnomaly : MonoBehaviour
     {
         ifSecondLevel = GetComponent<objectAnomalies>();
         anomalyRise = GetComponent<InterractableObjects>();
+        ChromEffect = GetComponent<anomalyCollectEffect>();
     }
     void Update()
     {
@@ -41,6 +43,7 @@ public class temperatureAnomaly : MonoBehaviour
             canCollectTemperature = false;
             anomalyRise.collectedAnomaly += 1;
             TempButton.interactable = false;
+            ChromEffect.CallChromaticEffect();
         }
     }
 }
