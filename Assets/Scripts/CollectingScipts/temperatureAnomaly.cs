@@ -42,6 +42,7 @@ public class temperatureAnomaly : MonoBehaviour
         {
             canCollectTemperature = false;
             anomalyRise.collectedAnomaly += 1;
+            InterractableObjects.memoryCollect += 1;
             TempButton.interactable = false;
             ChromEffect.CallChromaticEffect();
         }

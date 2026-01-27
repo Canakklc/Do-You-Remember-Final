@@ -81,7 +81,7 @@ public class ObjectChangeColor : MonoBehaviour
         }
     }
 
-    void ThermalAnomalyColorChange() // for ghost lvl
+    void ThermalAnomalyColorChange() // for polger lvl
     {
         if (!checkerCreatureType.setCreatureType[1]) return;
         for (int i = 0; i < thermalObjAnoms.Count; i++)
@@ -89,7 +89,7 @@ public class ObjectChangeColor : MonoBehaviour
             Renderer r = thermalObjAnoms[i].GetComponent<Renderer>();
             if (thermalCheck.thermalActive == true)
             {
-                if (timeTillAnom > 60f)
+                if (timeTillAnom > 100f)
                 {
                     r.material = Trying;
                 }

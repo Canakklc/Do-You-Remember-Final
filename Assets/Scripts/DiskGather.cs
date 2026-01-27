@@ -17,6 +17,7 @@ public class DiskGather : MonoBehaviour
     public int maxDiskToCarry;
     public Transform diskPlaceToInstantiate;
     public Transform DiskPlaceSec;
+    public Transform DiskPlaceThird;
 
     void Awake()
     {
@@ -89,7 +90,7 @@ public class DiskGather : MonoBehaviour
             }
             else if (GrabbedDisks[2] == true)
             {
-                thirdDiskCopy = Instantiate(Disks[2], diskPlaceToInstantiate.position, diskPlaceToInstantiate.rotation * fixRot);
+                thirdDiskCopy = Instantiate(Disks[2], DiskPlaceThird.position, DiskPlaceThird.rotation * fixRot);
                 thirdDiskCopy.SetActive(true);
                 maxDiskToCarry -= 1;
                 GrabbedDisks[2] = false;//close back
