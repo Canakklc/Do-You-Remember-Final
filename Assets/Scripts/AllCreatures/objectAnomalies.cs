@@ -33,23 +33,7 @@ public class objectAnomalies : MonoBehaviour
             originalRots.Add(objectCanFall[i].transform.rotation);
             boolsToCutAction.Add(false);
         }
-        determineCreatureInt = UnityEngine.Random.Range(1, 4);
-        for (int i = 0; i < 3; i++)
-        {
-            setCreatureType.Add(false);
-        }
-        if (determineCreatureInt == 1)
-        {
-            setCreatureType[0] = true; //means ghost active
-        }
-        else if (determineCreatureInt == 2)
-        {
-            setCreatureType[1] = true; // Poltergeist active
-        }
-        else
-        {
-            setCreatureType[2] = true;//Poltergeist active
-        }
+
 
     }
     void Awake()
@@ -135,9 +119,6 @@ public class objectAnomalies : MonoBehaviour
             }
         }
     }
-
-
-
 
     public void StartPossibilities()
     {

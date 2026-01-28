@@ -8,6 +8,8 @@ TagManager:
   - Settings
   - Orb
   - Disk
+  - CarActive
+  - This Car
   layers:
   - Default
   - TransparentFX
@@ -19,8 +21,8 @@ TagManager:
   - camPost
   - book
   - yellowObject
-  - 
-  - 
+  - Car Controller
+  - Car Post Process
   - 
   - 
   - 
