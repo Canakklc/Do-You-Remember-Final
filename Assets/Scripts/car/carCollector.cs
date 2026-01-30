@@ -28,7 +28,7 @@ public class carCollector : MonoBehaviour
     void Update()
     {
         if (takeRay.rayCastInfo.collider == null) return;
-        if (Input.GetMouseButton(0) && takeRay.rayCastInfo.collider.CompareTag("CarActive"))
+        if (Input.GetMouseButton(0) && takeRay.rayCastInfo.collider.CompareTag("CarActive") && inCarControl == false)
         {
             takeEffects.StartEffects();
             StartGenerateText();

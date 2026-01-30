@@ -8,6 +8,7 @@ public class charMovement : MonoBehaviour
     CCTVandCAM takeBool;
     Rigidbody rb;
     GuideBook bookBool;
+    carCollector carBool;
     public Transform playerCam;
 
     [Header("Movement Settings")]
@@ -35,7 +36,7 @@ public class charMovement : MonoBehaviour
         camEffects = GameObject.FindWithTag("Settings").GetComponent<PostProcesses>();
         takeBool = GameObject.FindWithTag("Settings").GetComponent<CCTVandCAM>();
         bookBool = GameObject.FindWithTag("Settings").GetComponent<GuideBook>();
-
+        carBool = GameObject.FindWithTag("Settings").GetComponent<carCollector>();
     }
 
     void Start()
@@ -46,7 +47,7 @@ public class charMovement : MonoBehaviour
 
     void Update()
     {
-        if (takeBool.onCCTV == false)
+        if (takeBool.onCCTV == false && carBool.inCarControl == false)
         {
             if (bookBool.canLook == true)
             {
@@ -61,7 +62,7 @@ public class charMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (takeBool.onCCTV == false)
+        if (takeBool.onCCTV == false && carBool.inCarControl == false)
         {
             Move();
         }
