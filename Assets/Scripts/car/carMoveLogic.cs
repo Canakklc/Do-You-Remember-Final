@@ -9,18 +9,16 @@ public class carMoveLogic : MonoBehaviour
     Rigidbody rb;
     carCollector takeBool;
     float xRotation = 0;
-    public float sensivity = 5f;
+    public float sensivity = 1.5f;
     public Transform carCam;
+    [SerializeField] Transform carTransform;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         takeBool = GameObject.FindWithTag("Settings").GetComponent<carCollector>();
     }
-    void Update()
-    {
-        Looking();
-    }
+
 
     void FixedUpdate()
     {
@@ -43,16 +41,5 @@ public class carMoveLogic : MonoBehaviour
             turnForce = 10f;
         }
     }
-    void Looking()
-    {
-        float mouseX = Input.GetAxis("Mouse X") * sensivity;
-        float mouseY = Input.GetAxis("Mouse Y") * sensivity;
 
-        transform.Rotate(Vector3.up * mouseX);
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        carCam.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-    }
 }
