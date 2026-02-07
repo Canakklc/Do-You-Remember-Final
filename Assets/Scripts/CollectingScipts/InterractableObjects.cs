@@ -7,21 +7,31 @@ using UnityEngine;
 public class InterractableObjects : MonoBehaviour
 {
     public GameObject hitObj;
+
     CamRaycast rayOfCam;
     justGhost takeRoomLights;
     objectAnomalies pickObjectCheck;
     anomalyCollectEffect anomalyCollectEffect;
-    public int collectedAnomaly = 0; //For level
-    public static int memoryCollect; //for disk static one
+
+    public int collectedAnomaly = 0; // For level
+    public static int memoryCollect; // for disk static one
+
     public TextMeshProUGUI memoryText;
+    public TextMeshProUGUI printCollectedAnomalies;
+
     public List<GameObject> interractibleObjects = new List<GameObject>();
     public List<GameObject> complicatedInterractibles = new List<GameObject>();
     public List<bool> LampBools = new List<bool>();
-    public TextMeshProUGUI printCollectedAnomalies;
+
     [Header("Second level object list")]
     public List<GameObject> secondLevelCollectibles = new List<GameObject>();
     public List<GameObject> secondLevelCOllectiblesStatic = new List<GameObject>();
+
     public float timerForHeatAnoms;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip collectAnomalySound;
 
     void Awake()
     {
@@ -29,46 +39,48 @@ public class InterractableObjects : MonoBehaviour
         takeRoomLights = GetComponent<justGhost>();
         pickObjectCheck = GetComponent<objectAnomalies>();
         anomalyCollectEffect = GetComponent<anomalyCollectEffect>();
-
     }
+
     void Start()
     {
-        for (int i = 0; i < interractibleObjects.Count; i++)
-        {
-            if (interractibleObjects[i] == null) continue;
-        }
-        //currentState = canCollect.Uncollectible;
         if (memoryCollect == 0)
         {
-            memoryCollect = 3;
+            memoryCollect = 1;
         }
     }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             CollectAnomaly();
         }
+
         printCollectedAnomalies.text = collectedAnomaly.ToString();
         timerForHeatAnoms += Time.deltaTime;
 
-        //Memory collection 
-        memoryText.text = " =" + " " + memoryCollect.ToString();
+        // Memory UI
+        memoryText.text = " = " + memoryCollect.ToString();
     }
-
 
     void CollectAnomaly()
     {
         if (rayOfCam.rayCastInfo.collider == null) return;
+
         hitObj = rayOfCam.rayCastInfo.collider.gameObject;
+
+        // LEVEL 1
         if (pickObjectCheck.setCreatureType[0] == true)
         {
             // NORMAL ANOMALY
             if (interractibleObjects.Contains(hitObj))
             {
+                PlayCollectSound();
                 anomalyCollectEffect.CallChromaticEffect();
+
                 collectedAnomaly++;
                 memoryCollect += 1;
+
                 interractibleObjects.Remove(hitObj);
                 Debug.Log("Anomaly Collected");
                 return;
@@ -82,7 +94,10 @@ public class InterractableObjects : MonoBehaviour
                     if (LampBools[i])
                     {
                         LampBools[i] = false;
+
+                        PlayCollectSound();
                         anomalyCollectEffect.CallChromaticEffect();
+
                         collectedAnomaly++;
                         memoryCollect += 1;
 
@@ -92,42 +107,57 @@ public class InterractableObjects : MonoBehaviour
                 }
             }
         }
-        if (pickObjectCheck.setCreatureType[1] == true)//level 2 collect logic
+
+        // LEVEL 2
+        if (pickObjectCheck.setCreatureType[1] == true)
         {
             if (secondLevelCollectibles.Contains(hitObj))
             {
                 if (timerForHeatAnoms > 60f)
                 {
-                    secondLevelCollectibles.Remove(hitObj);
+                    PlayCollectSound();
                     anomalyCollectEffect.CallChromaticEffect();
+
                     collectedAnomaly++;
                     memoryCollect += 1;
+
+                    secondLevelCollectibles.Remove(hitObj);
                     Debug.Log("Second collected");
                 }
             }
+
             if (secondLevelCOllectiblesStatic.Contains(hitObj))
             {
-                bool canCut = pickObjectCheck.boolsToCutAction[0] ||
-                              pickObjectCheck.boolsToCutAction[1] ||
-                              pickObjectCheck.boolsToCutAction[2];
+                bool canCut =
+                    pickObjectCheck.boolsToCutAction[0] ||
+                    pickObjectCheck.boolsToCutAction[1] ||
+                    pickObjectCheck.boolsToCutAction[2];
 
+                if (canCut)
                 {
-                    if (canCut)
-                    {
-                        collectedAnomaly++;
-                        memoryCollect += 1;
-                        anomalyCollectEffect.CallChromaticEffect();
-                        secondLevelCOllectiblesStatic.Remove(hitObj);
-                        pickObjectCheck.checkerForMotionAnimation[0] = false;
-                        pickObjectCheck.checkerForMotionAnimation[1] = false; //those are for motion image
-                        pickObjectCheck.checkerForMotionAnimation[2] = false;
-                        pickObjectCheck.canTransformPos = true;
-                    }
+                    PlayCollectSound();
+                    anomalyCollectEffect.CallChromaticEffect();
+
+                    collectedAnomaly++;
+                    memoryCollect += 1;
+
+                    secondLevelCOllectiblesStatic.Remove(hitObj);
+
+                    pickObjectCheck.checkerForMotionAnimation[0] = false;
+                    pickObjectCheck.checkerForMotionAnimation[1] = false;
+                    pickObjectCheck.checkerForMotionAnimation[2] = false;
+
+                    pickObjectCheck.canTransformPos = true;
                 }
             }
-
         }
     }
 
-
+    void PlayCollectSound()
+    {
+        if (audioSource != null && collectAnomalySound != null)
+        {
+            audioSource.PlayOneShot(collectAnomalySound);
+        }
+    }
 }

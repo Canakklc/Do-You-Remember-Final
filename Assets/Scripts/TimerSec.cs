@@ -31,9 +31,9 @@ public class TimerSec : MonoBehaviour
             totalPastSec += Time.deltaTime;
         }
 
-        if (hourTime >= 12 && minuteTime > 59)
+        if (hourTime >= 11 && minuteTime > 59)
         {
-            timeText = "01:00AM";
+            timeText = "00:00AM";
             stopTime = true;
 
         }

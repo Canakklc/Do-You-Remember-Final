@@ -9,10 +9,14 @@ public class temperatureAnomaly : MonoBehaviour
     objectAnomalies ifSecondLevel;
     InterractableObjects anomalyRise;
     anomalyCollectEffect ChromEffect;
+
     float timerForTemperature;
     public bool canCollectTemperature = false;
     public Button TempButton;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip temperatureCollectClip;
 
     void Awake()
     {
@@ -20,11 +24,13 @@ public class temperatureAnomaly : MonoBehaviour
         anomalyRise = GetComponent<InterractableObjects>();
         ChromEffect = GetComponent<anomalyCollectEffect>();
     }
+
     void Update()
     {
         timerForTemperature += Time.deltaTime;
         TemperatureRise();
     }
+
     void TemperatureRise()
     {
         if (ifSecondLevel.setCreatureType[1] == true)
@@ -36,15 +42,22 @@ public class temperatureAnomaly : MonoBehaviour
             }
         }
     }
+
     public void CollectTemperature()
     {
-        if (canCollectTemperature == true)
+        if (!canCollectTemperature) return;
+
+        canCollectTemperature = false;
+        anomalyRise.collectedAnomaly += 1;
+        InterractableObjects.memoryCollect += 1;
+        TempButton.interactable = false;
+
+        ChromEffect.CallChromaticEffect();
+
+        // 🔊 SES
+        if (audioSource != null && temperatureCollectClip != null)
         {
-            canCollectTemperature = false;
-            anomalyRise.collectedAnomaly += 1;
-            InterractableObjects.memoryCollect += 1;
-            TempButton.interactable = false;
-            ChromEffect.CallChromaticEffect();
+            audioSource.PlayOneShot(temperatureCollectClip);
         }
     }
 }

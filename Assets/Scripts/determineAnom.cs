@@ -6,16 +6,31 @@ using UnityEngine.UI;
 public class determineAnom : MonoBehaviour
 {
     Raycast takeRay;
+
     public List<RawImage> Circles = new List<RawImage>();
     public GameObject playerMesh;
     public GameObject board;
+
     float distance;
     Color colors;
+
     public bool Marked = false;
+
     bool isGhost;
     bool isPolger;
     bool isDemon;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip hoverSound;
+    public AudioClip markedSound;
+
+    bool hoverPlayed = false;
+
+    void Awake()
+    {
+        takeRay = GetComponent<Raycast>();
+    }
 
     void Start()
     {
@@ -25,68 +40,92 @@ public class determineAnom : MonoBehaviour
             colors.a = 0;
             Circles[i].color = colors;
         }
-
-
     }
+
     void Update()
     {
+        distance = Vector3.Distance(playerMesh.transform.position, board.transform.position);
+
         getRaycast();
-        if (!takeRay.rayCastInfo.collider) return;
+
+        if (!takeRay.rayCastInfo.collider)
+        {
+            hoverPlayed = false;
+            return;
+        }
+
         string n = takeRay.rayCastInfo.collider.name;
 
         isGhost = n == "GhostTrigger";
         isDemon = n == "DemonTrigger";
         isPolger = n == "PolterTrigger";
-        if (Input.GetMouseButton(0))
+
+        // MARK
+        if (Input.GetMouseButtonDown(0))
         {
-            if (isGhost || isDemon || isPolger)
+            if ((isGhost || isDemon || isPolger) && !Marked && distance < 2)
             {
                 Marked = true;
+                audioSource.PlayOneShot(markedSound);
             }
         }
-        distance = Vector3.Distance(playerMesh.transform.position, board.transform.position);
-
-    }
-    void Awake()
-    {
-        takeRay = GetComponent<Raycast>();
     }
 
     void getRaycast()
     {
         bool cond = distance < 2;
-        if (takeRay.rayCastInfo.collider == null) return;
-        if (takeRay.rayCastInfo.collider.name == "GhostTrigger" && Marked == false && cond)
+
+        if (takeRay.rayCastInfo.collider == null)
+            return;
+
+        if (Marked == false && cond)
         {
-            Color colorFirst = Circles[0].color;
-            colorFirst.a = 100;
-            Circles[0].color = colorFirst;
-        }
-        else if (takeRay.rayCastInfo.collider.name == "PolterTrigger" && Marked == false && cond)
-        {
-            Color colorSec = Circles[1].color;
-            colorSec.a = 100;
-            Circles[1].color = colorSec;
-        }
-        else if (takeRay.rayCastInfo.collider.name == "DemonTrigger" && Marked == false && cond)
-        {
-            Color colorThird = Circles[2].color;
-            colorThird.a = 100;
-            Circles[2].color = colorThird;
-        }
-        else
-        {
-            if (Marked == false)
+            if (!hoverPlayed &&
+                (takeRay.rayCastInfo.collider.name == "GhostTrigger" ||
+                 takeRay.rayCastInfo.collider.name == "PolterTrigger" ||
+                 takeRay.rayCastInfo.collider.name == "DemonTrigger"))
             {
-                for (int i = 0; i < Circles.Count; i++)
-                {
-                    Color allReset = Circles[i].color;
-                    allReset.a = 0;
-                    Circles[i].color = allReset;
-                }
+                audioSource.PlayOneShot(hoverSound);
+                hoverPlayed = true;
             }
         }
 
+        if (takeRay.rayCastInfo.collider.name == "GhostTrigger" && !Marked && cond)
+        {
+            SetAlpha(0, 100);
+        }
+        else if (takeRay.rayCastInfo.collider.name == "PolterTrigger" && !Marked && cond)
+        {
+            SetAlpha(1, 100);
+        }
+        else if (takeRay.rayCastInfo.collider.name == "DemonTrigger" && !Marked && cond)
+        {
+            SetAlpha(2, 100);
+        }
+        else
+        {
+            if (!Marked)
+            {
+                ResetAllAlpha();
+                hoverPlayed = false;
+            }
+        }
+    }
 
+    void SetAlpha(int index, float alpha)
+    {
+        Color c = Circles[index].color;
+        c.a = alpha;
+        Circles[index].color = c;
+    }
+
+    void ResetAllAlpha()
+    {
+        for (int i = 0; i < Circles.Count; i++)
+        {
+            Color c = Circles[i].color;
+            c.a = 0;
+            Circles[i].color = c;
+        }
     }
 }

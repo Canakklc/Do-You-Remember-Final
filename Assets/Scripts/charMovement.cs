@@ -30,6 +30,12 @@ public class charMovement : MonoBehaviour
     public float xRotation = 0f;
     bool wasRunning = false;
 
+    // AUDIO
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip walkClip;
+    public AudioClip sprintClip;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -43,6 +49,8 @@ public class charMovement : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         rb.freezeRotation = true;
+
+        audioSource.loop = true;
     }
 
     void Update()
@@ -66,8 +74,8 @@ public class charMovement : MonoBehaviour
         {
             Move();
         }
-        bool sprintKey = Input.GetKey(KeyCode.LeftShift) && canSprint;
 
+        bool sprintKey = Input.GetKey(KeyCode.LeftShift) && canSprint;
 
         if (sprintKey && !wasRunning)
         {
@@ -76,7 +84,6 @@ public class charMovement : MonoBehaviour
                 camEffects.StartFOW();
             }
         }
-
         else if (!sprintKey && wasRunning)
         {
             if (takeBool.onCCTV == false && Input.GetKey(KeyCode.W) && bookBool.bookVisible == false)
@@ -99,6 +106,32 @@ public class charMovement : MonoBehaviour
         else
         {
             isRunning = false;
+        }
+
+        // === FOOTSTEP AUDIO (YÜRÜME / KOŞMA) ===
+        bool isMoving = Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0;
+        bool isSprintingNow = isRunning && Input.GetKey(KeyCode.W);
+
+        if (isMoving && !isSprintingNow)
+        {
+            if (!audioSource.isPlaying || audioSource.clip != walkClip)
+            {
+                audioSource.clip = walkClip;
+                audioSource.Play();
+            }
+        }
+        else if (isSprintingNow)
+        {
+            if (!audioSource.isPlaying || audioSource.clip != sprintClip)
+            {
+                audioSource.clip = sprintClip;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (audioSource.isPlaying)
+                audioSource.Stop();
         }
 
         wasRunning = isRunning;
